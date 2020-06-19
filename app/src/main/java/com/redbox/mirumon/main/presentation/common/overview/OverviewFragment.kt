@@ -14,6 +14,9 @@ import kotlinx.android.synthetic.main.fragment_overview.common_arch_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_os_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_serial_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_version_tv
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class OverviewFragment : Fragment() {
@@ -32,7 +35,9 @@ class OverviewFragment : Fragment() {
         vm.state.observe(this, Observer {
             when (it) {
                 is OverViewState.Loading -> {
-                    vm.getOS()
+                    GlobalScope.launch(Dispatchers.IO) {
+                        vm.getOS()
+                    }
                     applyTextLoadingState(
                         common_os_tv,
                         common_arch_tv,

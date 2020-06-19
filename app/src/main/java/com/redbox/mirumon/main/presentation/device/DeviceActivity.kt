@@ -24,6 +24,9 @@ import kotlinx.android.synthetic.main.activity_device.device_name_tv
 import kotlinx.android.synthetic.main.activity_device.device_shutdown_btn
 import kotlinx.android.synthetic.main.activity_device.device_user_tv
 import kotlinx.android.synthetic.main.activity_device.device_workgroup_tv
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class DeviceActivity : AppCompatActivity() {
@@ -44,7 +47,10 @@ class DeviceActivity : AppCompatActivity() {
 
         vm.state.observe(this, Observer {
             when (it) {
-                is DeviceState.Initial -> vm.getDeviceInfo()
+                is DeviceState.Initial ->
+                    GlobalScope.launch(Dispatchers.IO) {
+                        vm.getDeviceInfo()
+                    }
                 is DeviceState.Loading -> this.applyTextLoadingState(
                     device_name_tv,
                     device_domain_tv,
@@ -75,7 +81,9 @@ class DeviceActivity : AppCompatActivity() {
         })
 
         device_shutdown_btn.setOnClickListener {
-            vm.shutdownPC()
+            GlobalScope.launch(Dispatchers.IO) {
+                vm.shutdownPC()
+            }
         }
 
         device_exec_btn.setActionListener {
@@ -83,7 +91,9 @@ class DeviceActivity : AppCompatActivity() {
         }
 
         device_exec_et.setOnEditorActionListener { _: TextView, _: Int, _: KeyEvent? ->
-            vm.executeСommand(device_exec_et.text.toString())
+            GlobalScope.launch(Dispatchers.IO) {
+                vm.executeCommand(device_exec_et.text.toString())
+            }
             return@setOnEditorActionListener true
         }
     }

@@ -15,6 +15,9 @@ import com.redbox.mirumon.main.extensions.applySuccessState
 import kotlinx.android.synthetic.main.fragment_software.common_software_btn
 import kotlinx.android.synthetic.main.fragment_software.software_list_rv
 import kotlinx.android.synthetic.main.fragment_software.software_pv
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SoftwareFragment : Fragment() {
@@ -38,7 +41,8 @@ class SoftwareFragment : Fragment() {
         vm.state.observe(this, Observer {
             when (it) {
                 is SoftwareState.Initial -> {
-                    vm.getSoftware()
+                    GlobalScope.launch(Dispatchers.IO) {
+                        vm.getSoftware()}
                 }
                 is SoftwareState.Loading -> {
                     common_software_btn.setActionListener {

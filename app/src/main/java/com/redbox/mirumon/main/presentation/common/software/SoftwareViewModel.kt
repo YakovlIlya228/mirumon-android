@@ -3,6 +3,7 @@ package com.redbox.mirumon.main.presentation.common.software
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.redbox.mirumon.main.domain.info.DeviceRepository
+import java.net.UnknownHostException
 
 class SoftwareViewModel(private val repository: DeviceRepository) : ViewModel() {
 
@@ -12,13 +13,14 @@ class SoftwareViewModel(private val repository: DeviceRepository) : ViewModel() 
         state.value = SoftwareState.Initial
     }
 
-    fun getSoftware() {
+    suspend fun getSoftware() {
         state.postValue(SoftwareState.Loading)
-        repository.getSoftware({
-            state.postValue(SoftwareState.Success(it))
-        }, {
-            it.printStackTrace()
+        try {
+            state.postValue(SoftwareState.Success(repository.getSoftware()))
+        }
+        catch (t: UnknownHostException){
+            t.printStackTrace()
             state.postValue(SoftwareState.Error)
-        })
+        }
     }
 }

@@ -10,55 +10,13 @@ import io.reactivex.schedulers.Schedulers
 
 class DeviceRepository(private val service: DeviceService) {
 
-    fun getSoftware(
-        onSuccess: (ArrayList<Software>) -> Unit,
-        onError: (Throwable) -> Unit
-    ): Disposable {
-        return service
-            .getSoftware(CommonRepository.getAddress())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess, onError)
-    }
+    suspend fun getSoftware() = service.getSoftware(CommonRepository.getAddress())
 
-    fun getOS(
-        onSuccess: (DeviceInfo) -> Unit,
-        onError: (Throwable) -> Unit
-    ): Disposable {
-        return service
-            .getOS(CommonRepository.getAddress())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess, onError)
-    }
+    suspend fun getOS() = service.getOS(CommonRepository.getAddress())
 
-    fun getDeviceInfo(
-        onSuccess: (DeviceInfo) -> Unit,
-        onError: (Throwable) -> Unit
-    ): Disposable {
-        return service
-            .getDetails(CommonRepository.getAddress())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess, onError)
-    }
+    suspend fun getDeviceInfo() = service.getDetails(CommonRepository.getAddress())
 
-    fun shutdownPC(
-        onSuccess: (String) -> Unit,
-        onError: (Throwable) -> Unit
-    ): Disposable {
-        return service.shutdownPC(CommonRepository.getAddress()).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess, onError)
-    }
+    suspend fun shutdownPC() = service.shutdownPC(CommonRepository.getAddress())
 
-    fun executeCommand(
-        command: Command,
-        onSuccess: (String) -> Unit,
-        onError: (Throwable) -> Unit
-    ): Disposable {
-        return service.executeCommand(CommonRepository.getAddress(), command).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess, onError)
-    }
+    suspend fun executeCommand(command: Command) = service.executeCommand(CommonRepository.getAddress(), command)
 }

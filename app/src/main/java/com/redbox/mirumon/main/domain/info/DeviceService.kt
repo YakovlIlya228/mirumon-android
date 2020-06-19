@@ -11,17 +11,17 @@ import retrofit2.http.Path
 
 interface DeviceService {
     @GET("/computers/{mac-address}/details")
-    fun getDetails(@Path("mac-address") id: String): Single<DeviceInfo>
+    suspend fun getDetails(@Path("mac-address") id: String): DeviceInfo
 
     @GET("/computers/{mac-address}/installed-programs")
-    fun getSoftware(@Path("mac-address") id: String): Single<ArrayList<Software>>
+    suspend fun getSoftware(@Path("mac-address") id: String): ArrayList<Software>
 
     @GET("/computers/{mac-address}/details")
-    fun getOS(@Path("mac-address") id: String): Single<DeviceInfo>
+    suspend fun getOS(@Path("mac-address") id: String): DeviceInfo
 
     @POST("/computers/{mac-address}/shutdown")
-    fun shutdownPC(@Path("mac-address") id: String): Single<String>
+    suspend fun shutdownPC(@Path("mac-address") id: String): String
 
     @POST("/computers/{mac-address}/execute")
-    fun executeCommand(@Path("mac-address") id: String, @Body command: Command): Single<String>
+    suspend fun executeCommand(@Path("mac-address") id: String, @Body command: Command): String
 }

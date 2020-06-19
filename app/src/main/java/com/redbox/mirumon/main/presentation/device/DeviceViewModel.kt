@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.redbox.mirumon.main.domain.info.DeviceRepository
 import com.redbox.mirumon.main.domain.pojo.Command
+import java.net.UnknownHostException
 
 class DeviceViewModel(private val rep: DeviceRepository) : ViewModel() {
 
@@ -13,20 +14,23 @@ class DeviceViewModel(private val rep: DeviceRepository) : ViewModel() {
         state.value = DeviceState.Initial
     }
 
-    fun getDeviceInfo() {
+    suspend fun getDeviceInfo(){
         state.postValue(DeviceState.Loading)
-        rep.getDeviceInfo({
-            state.postValue(DeviceState.Success(it))
-        }, {
-            it.printStackTrace()
-        })
+        try {
+            state.postValue(DeviceState.Success(rep.getDeviceInfo()))
+        }
+        catch (t: UnknownHostException){
+            t.printStackTrace()
+            state.postValue(DeviceState.Error)
+        }
     }
 
-    fun shutdownPC() {
-        rep.shutdownPC({ state.postValue(DeviceState.ShuttingDown) }, {})
+    suspend fun shutdownPC() {
+            rep.shutdownPC()
+            state.postValue(DeviceState.ShuttingDown)
     }
 
-    fun executeСommand(command: String) {
-        rep.executeCommand(Command(command), {}, {})
+    suspend fun executeCommand(command: String) {
+            rep.executeCommand(Command(command))
     }
 }
