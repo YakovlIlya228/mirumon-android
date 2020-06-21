@@ -48,7 +48,7 @@ class DeviceActivity : AppCompatActivity() {
         vm.state.observe(this, Observer {
             when (it) {
                 is DeviceState.Initial ->
-                    GlobalScope.launch(Dispatchers.IO) {
+                    GlobalScope.launch {
                         vm.getDeviceInfo()
                     }
                 is DeviceState.Loading -> this.applyTextLoadingState(
@@ -81,7 +81,7 @@ class DeviceActivity : AppCompatActivity() {
         })
 
         device_shutdown_btn.setOnClickListener {
-            GlobalScope.launch(Dispatchers.IO) {
+            GlobalScope.launch {
                 vm.shutdownPC()
             }
         }
@@ -91,7 +91,7 @@ class DeviceActivity : AppCompatActivity() {
         }
 
         device_exec_et.setOnEditorActionListener { _: TextView, _: Int, _: KeyEvent? ->
-            GlobalScope.launch(Dispatchers.IO) {
+            GlobalScope.launch {
                 vm.executeCommand(device_exec_et.text.toString())
             }
             return@setOnEditorActionListener true

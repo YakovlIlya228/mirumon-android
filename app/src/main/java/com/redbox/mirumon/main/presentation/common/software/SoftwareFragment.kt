@@ -41,7 +41,7 @@ class SoftwareFragment : Fragment() {
         vm.state.observe(this, Observer {
             when (it) {
                 is SoftwareState.Initial -> {
-                    GlobalScope.launch(Dispatchers.IO) {
+                    GlobalScope.launch {
                         vm.getSoftware()}
                 }
                 is SoftwareState.Loading -> {

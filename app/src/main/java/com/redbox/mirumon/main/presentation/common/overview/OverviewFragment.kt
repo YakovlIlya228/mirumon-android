@@ -35,7 +35,7 @@ class OverviewFragment : Fragment() {
         vm.state.observe(this, Observer {
             when (it) {
                 is OverViewState.Loading -> {
-                    GlobalScope.launch(Dispatchers.IO) {
+                    GlobalScope.launch {
                         vm.getOS()
                     }
                     applyTextLoadingState(
