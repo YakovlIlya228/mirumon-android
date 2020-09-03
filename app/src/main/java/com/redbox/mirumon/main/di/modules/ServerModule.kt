@@ -5,6 +5,7 @@ import com.redbox.mirumon.main.presentation.server.ServerViewModel
 import com.redbox.mirumon.main.presentation.server.db.ServerDatabase
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 
@@ -16,5 +17,5 @@ val serverModule = module {
         ).build()
     }
     single { get<ServerDatabase>().serverDao() }
-    viewModel { ServerViewModel(get(),get()) }
+    viewModel { ServerViewModel(get(named("Auth"))) }
 }

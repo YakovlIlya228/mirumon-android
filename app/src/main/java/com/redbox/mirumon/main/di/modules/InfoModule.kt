@@ -14,7 +14,7 @@ val infoModule = module {
     viewModel { SoftwareViewModel(get()) }
     viewModel { OverViewModel(get()) }
     viewModel { DeviceViewModel(get()) }
-    viewModel { DeviceListViewModel(get(),get()) }
+    viewModel { DeviceListViewModel(get()) }
     single { DeviceRepository(get()) }
     single { get<Retrofit>().create(DeviceService::class.java) }
 }

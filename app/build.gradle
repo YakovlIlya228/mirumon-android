@@ -18,7 +18,9 @@ android {
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "APPCENTER_SECRET", '"34dae18b-2008-4795-8ca0-568809d934bf"'
-        buildConfigField "String", "BASE_URL", '"https://api.mirumon.dev"'
+        buildConfigField "String", "BASE_URL", '"https://api.mirumon.dev/"'
+        buildConfigField "String", "USER_TOKEN", '"USER_TOKEN"'
+        buildConfigField "String", "USER_SERVER", '"USER_SERVER"'
     }
 
     compileOptions {
@@ -79,7 +81,9 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
     implementation "com.android.support:recyclerview-v7:28.0.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     testImplementation "junit:junit:4.12"
+    testImplementation 'org.mockito:mockito-core:3.5.9'
     androidTestImplementation "androidx.test:runner:1.2.0"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 
@@ -108,6 +112,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     def koin_version = '2.1.6'
+    testImplementation "org.koin:koin-test:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-scope:$koin_version"
     implementation "org.koin:koin-android-viewmodel:$koin_version"

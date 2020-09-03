@@ -23,10 +23,12 @@ interface DeviceService {
     @POST("/computers/{mac-address}/execute")
     suspend fun executeCommand(@Path("mac-address") id: String, @Body command: Command): String
 
-    @POST("/v1/oauth/token")
-    suspend fun loginUser(@Body loginUser: LoginUser): Token
+    @FormUrlEncoded
+    @POST("/users/login")
+    suspend fun loginUser(@Field("username") username: String, @Field("password") password: String): Token
 
-    @GET("/v1/devices")
-    suspend fun getDevices(@Header("Authorization: Bearer") token: String): LiveData<List<Device>>
+    @Headers( "Content-Type: application/json;charset=UTF-8")
+    @GET("/devices")
+    suspend fun getDevices(): List<Device>
 
 }

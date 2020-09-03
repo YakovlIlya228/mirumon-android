@@ -6,20 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.pojo.Device
 import kotlinx.android.synthetic.main.fragment_device_list.device_list_rv
 import kotlinx.android.synthetic.main.fragment_device_list.list_refresh
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class DeviceListFragment : Fragment() {
 
-    val listViewModel: DeviceListViewModel by viewModel()
+    val listViewModel: DeviceListViewModel by viewModel(named("AuthViewModel"))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +24,7 @@ class DeviceListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 //        listViewModel = ViewModelProviders.of(this).get(DeviceListViewModel::class.java)
-        lifecycle.addObserver(listViewModel)
+//        lifecycle.addObserver(listViewModel)
         return inflater.inflate(R.layout.fragment_device_list, container, false)
     }
 
@@ -48,12 +45,12 @@ class DeviceListFragment : Fragment() {
             R.color.colorPrimaryDark
         )
 
-        list_refresh.setOnRefreshListener {
-            GlobalScope.launch(Dispatchers.IO) {
-                listViewModel.getDevices()
-            }
-            list_refresh.isRefreshing = false
-        }
+//        list_refresh.setOnRefreshListener {
+//            GlobalScope.launch(Dispatchers.IO) {
+//                listViewModel.getDevices()
+//            }
+//            list_refresh.isRefreshing = false
+//        }
 
 //        listViewModel.observeDevices(this) {
 //            adapter = DeviceListAdapter(listViewModel::shutDown, it)
