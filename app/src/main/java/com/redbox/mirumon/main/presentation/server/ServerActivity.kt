@@ -3,12 +3,16 @@ package com.redbox.mirumon.main.presentation.server
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.redbox.mirumon.BuildConfig.USER_SERVER
-import com.redbox.mirumon.BuildConfig.USER_TOKEN
+import androidx.core.content.ContextCompat
+import com.redbox.mirumon.BuildConfig.*
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.pojo.LoginUser
 import com.redbox.mirumon.main.domain.pojo.Token
@@ -32,8 +36,12 @@ class ServerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server)
-        val sharedPref =
-            getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE)
+        sharedPref.getString(USER_LOGIN, null)?.let {
+            loginEditText.text = SpannableStringBuilder(it)
+        }
+        sharedPref.getString(USER_SERVER, null)?.let {
+            serverEditText.text = SpannableStringBuilder(it)
+        }
         serverButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 try {
@@ -42,6 +50,7 @@ class ServerActivity : AppCompatActivity() {
                         passwordEditText.text.toString()
                     )
                     sharedPref.edit().putString(USER_TOKEN, token.accessToken).apply()
+                    sharedPref.edit().putString(USER_LOGIN, loginEditText.text.toString()).apply()
                     sharedPref.edit().putString(USER_SERVER, serverEditText.text.toString())
                         .apply()
                     val intent = Intent(this@ServerActivity, MainActivity::class.java)
@@ -49,9 +58,39 @@ class ServerActivity : AppCompatActivity() {
 
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        applicationContext,
+                        "Username or/and password invalid!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e(TAG, "Couldn't get token!")
                 }
             }
         }
     }
+
+    fun isReachable(url: String) = GlobalScope.async(Dispatchers.IO) {
+        return@async InetAddress.getByName(url).isReachable(10000)
+    }
 }
+
+
+//    @RequiresApi(Build.VERSION_CODES.P)
+//    fun createBiometricPrompt(): {
+//        val executor = ContextCompat.getMainExecutor(this)
+//        val callback = @RequiresApi(Build.VERSION_CODES.P)
+//        object: BiometricPrompt.AuthenticationCallback() {
+//            override fun equals(other: Any?): Boolean {
+//                return super.equals(other)
+//            }
+//
+//            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+//                super.onAuthenticationSucceeded(result)
+//                val intent = Intent(this@ServerActivity, MainActivity::class.java)
+//                startActivity(intent)
+//
+//            }
+//        }
+//
+//    }
+

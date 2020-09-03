@@ -11,6 +11,7 @@ import com.redbox.mirumon.main.presentation.server.ServerViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -42,6 +43,7 @@ val networkModule = module {
     //Retrofit services with or w/o authentication
     single(named("noAuthService")) { get<Retrofit>(named("noAuth")).create(DeviceService::class.java) }
     single(named("AuthService")) { get<Retrofit>(named("Auth")).create(DeviceService::class.java) }
+//    single{androidContext()}
     single {
         androidApplication().getSharedPreferences(
             androidApplication().getString(R.string.pref_file_key),

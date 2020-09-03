@@ -12,12 +12,12 @@ import kotlinx.android.synthetic.main.activity_main.main_tabs_tl
 
 class MainActivity : AppCompatActivity() {
 
-    init {
-        AppCenter.start(
-            application, BuildConfig.APPCENTER_SECRET,
-            Analytics::class.java, Crashes::class.java
-        )
-    }
+//    init {
+//        AppCenter.start(
+//            application, BuildConfig.APPCENTER_SECRET,
+//            Analytics::class.java, Crashes::class.java
+//        )
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
