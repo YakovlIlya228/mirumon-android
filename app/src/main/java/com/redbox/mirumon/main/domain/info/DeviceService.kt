@@ -1,15 +1,13 @@
 package com.redbox.mirumon.main.domain.info
 
-import com.redbox.mirumon.main.domain.pojo.Command
-import com.redbox.mirumon.main.domain.pojo.DeviceInfo
-import com.redbox.mirumon.main.domain.pojo.Software
+import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
+import com.redbox.mirumon.main.domain.pojo.*
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface DeviceService {
+
     @GET("/computers/{mac-address}/details")
     suspend fun getDetails(@Path("mac-address") id: String): DeviceInfo
 
@@ -24,4 +22,11 @@ interface DeviceService {
 
     @POST("/computers/{mac-address}/execute")
     suspend fun executeCommand(@Path("mac-address") id: String, @Body command: Command): String
+
+    @POST("/v1/oauth/token")
+    suspend fun loginUser(@Body loginUser: LoginUser): Token
+
+    @GET("/v1/devices")
+    suspend fun getDevices(@Header("Authorization: Bearer") token: String): LiveData<List<Device>>
+
 }

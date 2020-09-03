@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.common.CommonRepository
+import com.redbox.mirumon.main.domain.pojo.Device
 import com.redbox.mirumon.main.domain.pojo.DeviceListItem
 import com.redbox.mirumon.main.presentation.device.DeviceActivity
 import kotlinx.android.synthetic.main.device_list_item.view.common_arch_tv
@@ -23,10 +24,12 @@ import kotlinx.android.synthetic.main.device_list_item.view.device_name_tv
 import kotlinx.android.synthetic.main.device_list_item.view.device_power_btn
 
 class DeviceListAdapter(
-    val listener: (mac: String) -> Unit,
-    var deviceList: ArrayList<DeviceListItem>
+//    val listener: (mac: String) -> Unit
+//    var deviceList: ArrayList<Device>
 ) :
     RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder>() {
+
+    var deviceList = emptyList<Device>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         return DeviceViewHolder(
@@ -40,26 +43,31 @@ class DeviceListAdapter(
 
     override fun getItemCount() = deviceList.size
 
+    fun setDeviceList(list: ArrayList<Device>){
+        this.deviceList = list
+
+    }
+
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
         holder.apply {
             nameTv.text = deviceList[position].name
-            userTv.text = deviceList[position].user
+            userTv.text = deviceList[position].lastUser.name
             domainTv.text = deviceList[position].domain
 
             val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
             anim.startOffset = (100).toLong()
             indicatorIv.animation = anim
 
-            layout.setOnClickListener {
-                CommonRepository.setAddress(deviceList[position].macAddress)
-                context.startActivity(Intent(context, DeviceActivity::class.java))
-            }
-
-            powerButton.setOnClickListener {
-                listener(deviceList[position].macAddress)
-
-                notifyItemRemoved(position)
-            }
+//            layout.setOnClickListener {
+//                CommonRepository.setAddress(deviceList[position].macAddress)
+//                context.startActivity(Intent(context, DeviceActivity::class.java))
+//            }
+//
+//            powerButton.setOnClickListener {
+//                listener(deviceList[position].macAddress)
+//
+//                notifyItemRemoved(position)
+//            }
         }
     }
 
