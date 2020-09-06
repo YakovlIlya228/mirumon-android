@@ -18,34 +18,34 @@ class DeviceListViewModel(val deviceService: DeviceService) : ViewModel(), Lifec
 
     private val deviceList = MutableLiveData<ArrayList<DeviceListItem>>()
 
-    fun getDevices(): LiveData<List<Device>>  =  liveData { deviceService.getDevices() }
+    fun getDevices(): LiveData<List<Device>>  =  liveData { emit(deviceService.getDevices()) }
 
 
-    fun shutDown(macAddress: String) {
-        WebSocketDispatcher.sendEvent(SHUTDOWN, DetailsRequest(macAddress))
-    }
+//    fun shutDown(macAddress: String) {
+//        WebSocketDispatcher.sendEvent(SHUTDOWN, DetailsRequest(macAddress))
+//    }
+//
+//    fun observeDevices(
+//        lifecycleOwner: LifecycleOwner,
+//        callbackList: (ArrayList<DeviceListItem>) -> Unit
+//    ) =
+//        deviceList.observe(
+//            lifecycleOwner,
+//            Observer(callbackList)
+//        )
 
-    fun observeDevices(
-        lifecycleOwner: LifecycleOwner,
-        callbackList: (ArrayList<DeviceListItem>) -> Unit
-    ) =
-        deviceList.observe(
-            lifecycleOwner,
-            Observer(callbackList)
-        )
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    fun onRecieve(response: DeviceListEvent) {
-        deviceList.postValue(response.list)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    private fun onLifeCycleStart() {
-        EventBus.getDefault().register(this)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    private fun onLifeCyclePause() {
-        EventBus.getDefault().unregister(this)
-    }
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    fun onRecieve(response: DeviceListEvent) {
+//        deviceList.postValue(response.list)
+//    }
+//
+//    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+//    private fun onLifeCycleStart() {
+//        EventBus.getDefault().register(this)
+//    }
+//
+//    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+//    private fun onLifeCyclePause() {
+//        EventBus.getDefault().unregister(this)
+//    }
 }

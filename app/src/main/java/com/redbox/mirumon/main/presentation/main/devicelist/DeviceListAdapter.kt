@@ -23,13 +23,10 @@ import kotlinx.android.synthetic.main.device_list_item.view.device_indicator_iv
 import kotlinx.android.synthetic.main.device_list_item.view.device_name_tv
 import kotlinx.android.synthetic.main.device_list_item.view.device_power_btn
 
-class DeviceListAdapter(
-//    val listener: (mac: String) -> Unit
-//    var deviceList: ArrayList<Device>
-) :
+class DeviceListAdapter:
     RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder>() {
 
-    var deviceList = emptyList<Device>()
+    private var deviceList = ArrayList<Device>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         return DeviceViewHolder(
@@ -43,9 +40,9 @@ class DeviceListAdapter(
 
     override fun getItemCount() = deviceList.size
 
-    fun setDeviceList(list: ArrayList<Device>){
-        this.deviceList = list
-
+    fun setList(list: ArrayList<Device>){
+        deviceList = list
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {

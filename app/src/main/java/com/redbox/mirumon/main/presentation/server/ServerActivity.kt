@@ -1,5 +1,6 @@
 package com.redbox.mirumon.main.presentation.server
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,7 +12,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.redbox.mirumon.BuildConfig.*
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.pojo.LoginUser
@@ -33,6 +36,7 @@ class ServerActivity : AppCompatActivity() {
     val sharedPref: SharedPreferences by inject()
     val TAG = "error_tag"
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server)
@@ -42,6 +46,20 @@ class ServerActivity : AppCompatActivity() {
         sharedPref.getString(USER_SERVER, null)?.let {
             serverEditText.text = SpannableStringBuilder(it)
         }
+//        if (sharedPref.getString(USER_SERVER, null) != null && sharedPref.getString(
+//                USER_LOGIN,
+//                null
+//            ) != null
+//        ) {
+//            if (canAuthenticate(this)) {
+//                val biometricPrompt: BiometricPrompt =
+//                    BiometricPrompt.Builder(this)
+//                        .setTitle("Mirumon Login")
+//                        .setSubtitle("Sign in using fingerprint")
+//                        .build()
+//                biometricPrompt.authenticate()
+//            }
+//        }
         serverButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 try {
@@ -69,28 +87,28 @@ class ServerActivity : AppCompatActivity() {
         }
     }
 
-    fun isReachable(url: String) = GlobalScope.async(Dispatchers.IO) {
-        return@async InetAddress.getByName(url).isReachable(10000)
-    }
-}
-
-
-//    @RequiresApi(Build.VERSION_CODES.P)
-//    fun createBiometricPrompt(): {
-//        val executor = ContextCompat.getMainExecutor(this)
-//        val callback = @RequiresApi(Build.VERSION_CODES.P)
-//        object: BiometricPrompt.AuthenticationCallback() {
-//            override fun equals(other: Any?): Boolean {
-//                return super.equals(other)
-//            }
-//
-//            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
-//                super.onAuthenticationSucceeded(result)
-//                val intent = Intent(this@ServerActivity, MainActivity::class.java)
-//                startActivity(intent)
-//
-//            }
-//        }
-//
+//    fun isReachable(url: String) = GlobalScope.async(Dispatchers.IO) {
+//        return@async InetAddress.getByName(url).isReachable(10000)
 //    }
 
+//    @RequiresApi(Build.VERSION_CODES.P)
+//    fun createAuthenticationCallback(context: Context): BiometricPrompt.AuthenticationCallback {
+//        return object : BiometricPrompt.AuthenticationCallback() {
+//            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+//                super.onAuthenticationSucceeded(result)
+//                Toast.makeText(context, "Authenticated!", Toast.LENGTH_SHORT).show()
+//            }
+//
+//            override fun onAuthenticationFailed() {
+//                super.onAuthenticationFailed()
+//                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
+//    }
+
+//    fun canAuthenticate(context: Context): Boolean {
+//        return BiometricManager.from(context)
+//            .canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+//    }
+}

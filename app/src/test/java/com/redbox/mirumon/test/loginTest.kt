@@ -19,21 +19,26 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.parameter.parametersOf
 import org.koin.test.KoinTest
+import org.koin.test.check.checkModules
 import org.koin.test.inject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.util.concurrent.TimeUnit
 
 @RunWith(JUnit4::class)
 class loginTest : KoinTest {
 
-    val service: DeviceService by inject{parametersOf(server.hostName)}
+    val retrofitClient: Retrofit by inject{parametersOf(server.hostName)}
+    val service = retrofitClient.create(DeviceService::class.java)
     val server = MockWebServer()
 
     @Before
     fun setup() {
         startKoin {
             modules(testModule)
+        }.checkModules {
+            create<DeviceService> { parametersOf(String())}
         }
         server.enqueue(MockResponse().setBody(MockResponseFileReader("C:\\Users\\jakov\\AndroidStudioProjects\\mirumon-users\\app\\src\\test\\java\\com\\redbox\\mirumon\\Token.json")))
 //        server.enqueue(MockResponse().setBody(MockResponseFileReader("Devices.json").content))
@@ -42,14 +47,14 @@ class loginTest : KoinTest {
 
     @Test
     fun getToken() = runBlocking {
-        val token = service.loginUser("admin2", "123456")
-        assertThat(token.accessToken, notNullValue())
-        assertThat(token.tokenType, notNullValue())
+        val token = service.loginUser("admin1", "12345")
+        assertThat(token.accessToken, equals("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsInNjb3BlcyI6W10sImV4cCI6MTU5OTc1ODQ1OSwic3ViIjoiYWNjZXNzIn0.anEG24AXmD-KkgszFhf9IJJxAjq0yacL7YSaRaMSmgI"))
+        assertThat(token.tokenType, equals("Bearer"))
     }
 
     @Test
     fun getDevice() = runBlocking {
-        val token = "Bearer " + service.loginUser("admin2", "123456").accessToken
+        val token = "Bearer " + service.loginUser("admin1", "12345").accessToken
         val httpClient = OkHttpClient.Builder().addInterceptor {
             val request = it.request().newBuilder()
                 .header(

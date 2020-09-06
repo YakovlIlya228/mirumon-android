@@ -1,6 +1,7 @@
 package com.redbox.mirumon.main.presentation.main.devicelist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,9 +33,12 @@ class DeviceListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = DeviceListAdapter()
         device_list_rv.adapter = adapter
-        listViewModel.getDevices().observe(viewLifecycleOwner, Observer {
-            adapter.setDeviceList(it as ArrayList<Device>)
-        })
+        savedInstanceState?: kotlin.run {
+            listViewModel.getDevices().observe(viewLifecycleOwner, Observer {
+                adapter.setList(it as ArrayList<Device>)
+            })
+        }
+
 //        GlobalScope.launch(Dispatchers.IO) {
 //            device_list_rv.adapter = DeviceListAdapter(listViewModel::shutDown, listViewModel.getDevices())
 //            listViewModel.getDevices()
@@ -60,4 +64,5 @@ class DeviceListFragment : Fragment() {
 
         device_list_rv.layoutManager = LinearLayoutManager(this.context)
     }
+
 }
