@@ -24,7 +24,7 @@ interface DeviceService {
     suspend fun executeCommand(@Path("mac-address") id: String, @Body command: Command): String
 
     @FormUrlEncoded
-    @POST("/users/login")
+    @POST("/users/token")
     suspend fun loginUser(@Field("username") username: String, @Field("password") password: String): Token
 
     @Headers( "Content-Type: application/json;charset=UTF-8")

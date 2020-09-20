@@ -1,42 +1,30 @@
 package com.redbox.mirumon.main.presentation.server
-
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.hardware.biometrics.BiometricPrompt
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricManager
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.redbox.mirumon.BuildConfig.*
 import com.redbox.mirumon.R
-import com.redbox.mirumon.main.domain.pojo.LoginUser
 import com.redbox.mirumon.main.domain.pojo.Token
 import com.redbox.mirumon.main.presentation.main.MainActivity
 import kotlinx.android.synthetic.main.activity_server.*
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
-import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
-import java.net.HttpURLConnection
-import java.net.InetAddress
-import java.net.URL
+
 
 class ServerActivity : AppCompatActivity() {
 
     val viewModel: ServerViewModel by viewModel(named("noAuthViewModel"))
     val sharedPref: SharedPreferences by inject()
+
+    //    val dataStore: DataStore<Preferences> by inject()
     val TAG = "error_tag"
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server)
@@ -78,10 +66,10 @@ class ServerActivity : AppCompatActivity() {
                     e.printStackTrace()
                     Toast.makeText(
                         applicationContext,
-                        "Username or/and password invalid!",
+                        e.toString(),
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.e(TAG, "Couldn't get token!")
+                    Log.e(TAG, "Couldn't get token! Exception: ${e}")
                 }
             }
         }

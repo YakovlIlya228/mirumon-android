@@ -1,10 +1,11 @@
 package com.redbox.mirumon.main.di.modules
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.datastore.preferences.createDataStore
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import com.redbox.mirumon.BuildConfig.*
-import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.info.DeviceService
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import com.redbox.mirumon.main.presentation.server.ServerViewModel
@@ -19,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit.SECONDS
+
 
 val networkModule = module {
     single { RxJava2CallAdapterFactory.create() }
@@ -45,11 +47,24 @@ val networkModule = module {
     single(named("AuthService")) { get<Retrofit>(named("Auth")).create(DeviceService::class.java) }
 //    single{androidContext()}
     single {
-        androidApplication().getSharedPreferences(
-            androidApplication().getString(R.string.pref_file_key),
-            Context.MODE_PRIVATE
+//        androidApplication().getSharedPreferences(
+//            androidApplication().getString(R.string.pref_file_key),
+//            Context.MODE_PRIVATE
+//        )
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        EncryptedSharedPreferences.create(
+            "credentials",
+            masterKeyAlias,
+            androidApplication(),
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
     }
+//    single {
+//        androidContext().createDataStore(
+//            "credentials"
+//        )
+//    }
     //OkHttp client with token
     single {
         val token: String = "Bearer " + get<SharedPreferences>().getString(USER_TOKEN, null)
