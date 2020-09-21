@@ -50,26 +50,29 @@ class DeviceListAdapter:
             nameTv.text = deviceList[position].name
             userTv.text = deviceList[position].lastUser.name
             domainTv.text = deviceList[position].domain
-
+            id = deviceList[position].id
             val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
             anim.startOffset = (100).toLong()
             indicatorIv.animation = anim
 
-//            layout.setOnClickListener {
-//                CommonRepository.setAddress(deviceList[position].macAddress)
-//                context.startActivity(Intent(context, DeviceActivity::class.java))
-//            }
-//
+            layout.setOnClickListener {
+                val computerIntent = Intent(this.context,DeviceActivity::class.java).apply {
+                    putExtra("DEVICE_ID",id)
+                }
+                context.startActivity(computerIntent)
+            }
+
 //            powerButton.setOnClickListener {
 //                listener(deviceList[position].macAddress)
 //
-//                notifyItemRemoved(position)
+//                notifyItemR-0emoved(position)
 //            }
         }
     }
 
     class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val powerButton: ImageButton = view.device_power_btn
+        lateinit var id: String
         val layout: ConstraintLayout = view.device_foreground_cl
         val context: Context = view.context
         val nameTv: TextView = view.device_name_tv

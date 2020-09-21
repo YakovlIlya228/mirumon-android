@@ -6,8 +6,13 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 28
+
     defaultConfig {
         applicationId "com.redbox.mirumon"
         minSdkVersion 23
@@ -15,8 +20,8 @@ android {
         versionCode 1
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "APPCENTER_SECRET", '"34dae18b-2008-4795-8ca0-568809d934bf"'
-        buildConfigField "String", "BASE_URL", '"https://api.mirumon.dev/"'
+        buildConfigField "String", "APPCENTER_SECRET", localProperties["appCenterSecret"]
+        buildConfigField "String", "BASE_URL", localProperties["baseUrl"]
         buildConfigField "String", "USER_TOKEN", '"USER_TOKEN"'
         buildConfigField "String", "USER_SERVER", '"USER_SERVER"'
         buildConfigField "String", "USER_LOGIN", '"USER_LOGIN"'
@@ -38,10 +43,10 @@ android {
 
     signingConfigs {
         release {
-            storePassword 'mirumon'
-            keyAlias = 'mirukey'
-            keyPassword 'mirumon'
-            storeFile file('/home/aredruss/keystore/uplod-miru.jks')
+            storePassword '123456'
+            keyAlias = 'mirumon'
+            keyPassword '123456'
+            storeFile file('C:\\Users\\jakov\\AndroidStudioProjects\\mirumon-android\\mirumon.jks')
         }
         release
     }
@@ -52,6 +57,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+
 
     }
 

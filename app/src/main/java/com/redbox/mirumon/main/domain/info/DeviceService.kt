@@ -23,6 +23,12 @@ interface DeviceService {
     @POST("/computers/{mac-address}/execute")
     suspend fun executeCommand(@Path("mac-address") id: String, @Body command: Command): String
 
+    @GET("devices/{id}/software")
+    suspend fun getDeviceSoftware(@Path("id") id: String): List<Software>
+
+    @GET("devices/{id}/detail")
+    suspend fun getDeviceDetail(@Path("id") id: String): Device
+
     @FormUrlEncoded
     @POST("/users/token")
     suspend fun loginUser(@Field("username") username: String, @Field("password") password: String): Token
@@ -30,5 +36,7 @@ interface DeviceService {
     @Headers( "Content-Type: application/json;charset=UTF-8")
     @GET("/devices")
     suspend fun getDevices(): List<Device>
+
+
 
 }

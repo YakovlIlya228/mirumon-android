@@ -19,8 +19,8 @@ import org.koin.core.qualifier.named
 
 class ServerActivity : AppCompatActivity() {
 
-    val viewModel: ServerViewModel by viewModel(named("noAuthViewModel"))
-    val sharedPref: SharedPreferences by inject()
+    private val viewModel: ServerViewModel by viewModel(named("noAuthViewModel"))
+    private val sharedPref: SharedPreferences by inject()
 
     //    val dataStore: DataStore<Preferences> by inject()
     val TAG = "error_tag"

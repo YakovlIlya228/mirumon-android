@@ -7,6 +7,7 @@ import com.redbox.mirumon.main.domain.info.DeviceService
 import com.redbox.mirumon.main.domain.pojo.DetailsRequest
 import com.redbox.mirumon.main.domain.pojo.Device
 import com.redbox.mirumon.main.domain.pojo.DeviceListItem
+import com.redbox.mirumon.main.domain.pojo.Software
 import com.redbox.mirumon.main.domain.websocket.SHUTDOWN
 import com.redbox.mirumon.main.domain.websocket.dispatcher.WebSocketDispatcher
 import com.redbox.mirumon.main.domain.websocket.events.DeviceListEvent
@@ -16,11 +17,22 @@ import org.greenrobot.eventbus.ThreadMode
 
 class DeviceListViewModel(val deviceService: DeviceService) : ViewModel(), LifecycleObserver {
 
-    private val deviceList = MutableLiveData<ArrayList<DeviceListItem>>()
+//    private val deviceList = MutableLiveData<ArrayList<DeviceListItem>>()
+    lateinit var deviceId: String
 
-    fun getDevices(): LiveData<List<Device>>  =  liveData { emit(deviceService.getDevices()) }
+    fun getDevices(): LiveData<List<Device>> = liveData { emit(deviceService.getDevices()) }
 
+    suspend fun refreshDevices(): List<Device> {
+        return deviceService.getDevices()
+    }
 
+    fun getDeviceDetail(id: String): LiveData<Device> = liveData {
+        emit(deviceService.getDeviceDetail(id))
+    }
+
+    fun getDeviceSoftware(id: String): LiveData<List<Software>> = liveData {
+        emit(deviceService.getDeviceSoftware(id))
+    }
 //    fun shutDown(macAddress: String) {
 //        WebSocketDispatcher.sendEvent(SHUTDOWN, DetailsRequest(macAddress))
 //    }

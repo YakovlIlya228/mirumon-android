@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.software_list_item.view.software_name_tv
 import kotlinx.android.synthetic.main.software_list_item.view.software_vendor_tv
 import kotlinx.android.synthetic.main.software_list_item.view.software_version_tv
 
-class SoftwareListAdapter(val softwareList: List<Software>) :
+class SoftwareListAdapter() :
     RecyclerView.Adapter<SoftwareListAdapter.SoftwareViewHolder>() {
+
+    var softwareList = ArrayList<Software>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SoftwareViewHolder {
         return SoftwareViewHolder(
@@ -23,7 +25,10 @@ class SoftwareListAdapter(val softwareList: List<Software>) :
             )
         )
     }
-
+    fun setList(list: ArrayList<Software>){
+        this.softwareList = list
+        notifyDataSetChanged()
+    }
     override fun getItemCount() = softwareList.size
 
     override fun onBindViewHolder(holder: SoftwareViewHolder, position: Int) {
