@@ -20,6 +20,12 @@ fun Fragment.applySuccessState(
     loader.isVisible = false
 }
 
+fun Fragment.applyLoadingState(
+    loader: ProgressBar
+){
+    loader.isVisible = true
+}
+
 fun Fragment.applyTextLoadingState(vararg textViews: TextView) {
     val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
     for (t in textViews) {

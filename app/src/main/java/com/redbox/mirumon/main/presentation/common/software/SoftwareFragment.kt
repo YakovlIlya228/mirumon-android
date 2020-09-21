@@ -45,9 +45,11 @@ class SoftwareFragment : Fragment(){
         software_list_rv.layoutManager = LinearLayoutManager(this.context)
         software_list_rv.adapter = adapter
         common_software_btn.setActionListener {
+            applyLoadingState(software_pv)
             viewModel.getDeviceSoftware(viewModel.deviceId).observe(viewLifecycleOwner, Observer {
                 adapter.setList(it as ArrayList<Software>)
                 software_list_rv.isVisible = common_software_btn.stateOpened
+                applySuccessState(software_pv)
             })
         }
 //        software_list_rv.adapter = adapter

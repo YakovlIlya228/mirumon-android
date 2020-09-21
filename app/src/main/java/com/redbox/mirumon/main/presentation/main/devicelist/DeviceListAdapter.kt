@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -27,7 +28,7 @@ class DeviceListAdapter:
     RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder>() {
 
     private var deviceList = ArrayList<Device>()
-
+    private lateinit var viewAnim: Animation
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         return DeviceViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -54,12 +55,14 @@ class DeviceListAdapter:
             val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
             anim.startOffset = (100).toLong()
             indicatorIv.animation = anim
-
+            viewAnim = AnimationUtils.loadAnimation(context,R.anim.blink)
             layout.setOnClickListener {
+                layout.startAnimation(viewAnim)
                 val computerIntent = Intent(this.context,DeviceActivity::class.java).apply {
                     putExtra("DEVICE_ID",id)
                 }
                 context.startActivity(computerIntent)
+                layout.clearAnimation()
             }
 
 //            powerButton.setOnClickListener {

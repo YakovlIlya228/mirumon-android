@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.redbox.mirumon.BuildConfig.*
@@ -21,7 +23,7 @@ class ServerActivity : AppCompatActivity() {
 
     private val viewModel: ServerViewModel by viewModel(named("noAuthViewModel"))
     private val sharedPref: SharedPreferences by inject()
-
+    private lateinit var btnAnim: Animation
     //    val dataStore: DataStore<Preferences> by inject()
     val TAG = "error_tag"
 
@@ -34,6 +36,8 @@ class ServerActivity : AppCompatActivity() {
         sharedPref.getString(USER_SERVER, null)?.let {
             serverEditText.text = SpannableStringBuilder(it)
         }
+
+        btnAnim = AnimationUtils.loadAnimation(applicationContext,R.anim.blink)
 //        if (sharedPref.getString(USER_SERVER, null) != null && sharedPref.getString(
 //                USER_LOGIN,
 //                null
@@ -49,6 +53,7 @@ class ServerActivity : AppCompatActivity() {
 //            }
 //        }
         serverButton.setOnClickListener {
+            serverButton.startAnimation(btnAnim)
             GlobalScope.launch(Dispatchers.Main) {
                 try {
                     val token: Token = viewModel.loginUser(
@@ -71,6 +76,7 @@ class ServerActivity : AppCompatActivity() {
                     ).show()
                     Log.e(TAG, "Couldn't get token! Exception: ${e}")
                 }
+                serverButton.clearAnimation()
             }
         }
     }

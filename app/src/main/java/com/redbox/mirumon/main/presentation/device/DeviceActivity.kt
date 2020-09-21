@@ -31,11 +31,11 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 
-class DeviceActivity : AppCompatActivity(){
+class DeviceActivity : AppCompatActivity() {
 
     private val viewModel: DeviceListViewModel by viewModel(named("AuthViewModel"))
 
-//    lateinit var dataTransmitter: CommonInfoActivity.DataTransmitter
+    //    lateinit var dataTransmitter: CommonInfoActivity.DataTransmitter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
@@ -55,13 +55,13 @@ class DeviceActivity : AppCompatActivity(){
 
         device_common_btn.setOnClickListener {
             startActivity(Intent(this, CommonInfoActivity::class.java).apply {
-                putExtra("DEVICE_ID",deviceId)
+                putExtra("DEVICE_ID", deviceId)
             })
-            }
+        }
 //            deviceId?.let {
 //                dataTransmitter.passId(it)
 //            }
-        }
+    }
 
 //
 //        vm.state.observe(this, Observer {
@@ -115,5 +115,5 @@ class DeviceActivity : AppCompatActivity(){
 //            }
 //            return@setOnEditorActionListener true
 //        }
-    }
+}
 
