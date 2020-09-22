@@ -19,6 +19,8 @@
         app:revealButtonIcon="@drawable/ic_programs"
         app:revealButtonText="@string/programs" />
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/software_list_rv"
         android:layout_width="match_parent"

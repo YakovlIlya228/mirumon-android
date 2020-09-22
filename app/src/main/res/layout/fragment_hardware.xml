@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.presentation.common.hardware.HardwareFragment">
+    <com.redbox.mirumon.main.presentation.util.RevealButton
+        android:id="@+id/motherboard_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/standard_background"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:revealButtonIcon="@drawable/ic_motherboard"
+        app:revealButtonText="Motherboard"
+        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/motherboard_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_15"
+        app:layout_constraintTop_toBottomOf="@id/motherboard_btn"
+        android:background="@drawable/text_background"
+        android:paddingBottom="@dimen/dp_10">
+        <TextView
+            android:id="@+id/name_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/name"
+            android:textColor="@color/colorMainFont"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/motherboard_name_tv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/motherboard_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:fontFamily="@font/lato_bold"
+            android:paddingBottom="@dimen/dp_5"
+            android:textColor="@color/colorAccentFont"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_label_tv" />
+
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="#21000000"
+            app:layout_constraintTop_toBottomOf="@id/motherboard_name_tv" />
+
+
+        <TextView
+            android:id="@+id/product_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:fontFamily="@font/lato_bold"
+            android:text="product"
+            android:textColor="@color/colorMainFont"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/motherboard_name_tv"
+            app:layout_constraintTop_toTopOf="@id/divider2" />
+
+        <TextView
+            android:id="@+id/hardware_product_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:fontFamily="@font/lato_bold"
+            android:paddingBottom="@dimen/dp_5"
+            android:textColor="@color/colorAccentFont"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/product_label_tv" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="#21000000"
+            app:layout_constraintBottom_toTopOf="@id/serial_label_tv"
+            app:layout_constraintTop_toBottomOf="@id/hardware_product_tv" />
+
+        <TextView
+            android:id="@+id/serial_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:text="serial number"
+            android:textColor="@color/colorMainFont"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/motherboard_name_tv"
+            app:layout_constraintTop_toTopOf="@id/divider" />
+
+        <TextView
+            android:id="@+id/hardware_serial_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/colorAccentFont"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/serial_label_tv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.redbox.mirumon.main.presentation.util.RevealButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/standard_background"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_15"
+        app:layout_constraintTop_toBottomOf="@id/motherboard_layout"
+        app:revealButtonIcon="@drawable/ic_cpu"
+        app:revealButtonText="CPU"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

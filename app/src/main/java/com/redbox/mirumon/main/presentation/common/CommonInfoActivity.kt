@@ -22,11 +22,12 @@ class CommonInfoActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         val titles = resources.getStringArray(R.array.common_titles)
         setContentView(R.layout.activity_common)
-        viewModel.deviceId = intent.extras!!.getString("DEVICE_ID")!!
+        CommonRepository.setAdress(intent.extras!!.getString("DEVICE_ID")!!)
         common_vp.adapter = CommonViewPagerAdapter(supportFragmentManager)
         common_tabs_tl.setupWithViewPager(common_vp)
         common_tabs_tl.getTabAt(0)?.setIcon(R.drawable.ic_info)
         common_tabs_tl.getTabAt(1)?.setIcon(R.drawable.ic_software)
+        common_tabs_tl.getTabAt(2)?.setIcon(R.drawable.ic_hardware)
         common_vp.currentItem = 1
         common_screen_tv.text = titles[1]
         common_tabs_tl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

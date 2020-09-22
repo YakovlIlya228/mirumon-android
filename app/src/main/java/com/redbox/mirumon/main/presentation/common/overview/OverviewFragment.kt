@@ -11,6 +11,7 @@ import com.redbox.mirumon.R
 import com.redbox.mirumon.main.extensions.applyErrorState
 import com.redbox.mirumon.main.extensions.applyTextLoadingState
 import com.redbox.mirumon.main.extensions.applyTextSuccessState
+import com.redbox.mirumon.main.presentation.common.CommonRepository
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import kotlinx.android.synthetic.main.fragment_overview.common_arch_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_os_tv
@@ -38,7 +39,7 @@ class OverviewFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.getDeviceDetail(viewModel.deviceId).observe(viewLifecycleOwner, Observer {
+        viewModel.getDeviceDetail(CommonRepository.getAddress()).observe(viewLifecycleOwner, Observer {
             common_os_tv.text = it.os[0].name
             common_arch_tv.text = it.os[0].arch
             common_serial_tv.text = it.os[0].serialNum

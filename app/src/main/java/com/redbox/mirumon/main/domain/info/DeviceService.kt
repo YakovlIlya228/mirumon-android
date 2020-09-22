@@ -29,6 +29,9 @@ interface DeviceService {
     @GET("devices/{id}/detail")
     suspend fun getDeviceDetail(@Path("id") id: String): Device
 
+    @GET("devices/{id}/hardware")
+    suspend fun getDeviceHardware(@Path("id") id: String): Hardware
+
     @FormUrlEncoded
     @POST("/users/token")
     suspend fun loginUser(@Field("username") username: String, @Field("password") password: String): Token

@@ -15,6 +15,7 @@ import com.redbox.mirumon.main.extensions.applyErrorState
 import com.redbox.mirumon.main.extensions.applyLoadingState
 import com.redbox.mirumon.main.extensions.applySuccessState
 import com.redbox.mirumon.main.presentation.common.CommonInfoActivity
+import com.redbox.mirumon.main.presentation.common.CommonRepository
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import kotlinx.android.synthetic.main.fragment_software.common_software_btn
 import kotlinx.android.synthetic.main.fragment_software.software_list_rv
@@ -46,7 +47,7 @@ class SoftwareFragment : Fragment(){
         software_list_rv.adapter = adapter
         common_software_btn.setActionListener {
             applyLoadingState(software_pv)
-            viewModel.getDeviceSoftware(viewModel.deviceId).observe(viewLifecycleOwner, Observer {
+            viewModel.getDeviceSoftware(CommonRepository.getAddress()).observe(viewLifecycleOwner, Observer {
                 adapter.setList(it as ArrayList<Software>)
                 software_list_rv.isVisible = common_software_btn.stateOpened
                 applySuccessState(software_pv)

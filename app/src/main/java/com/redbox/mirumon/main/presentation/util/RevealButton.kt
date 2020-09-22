@@ -8,9 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.redbox.mirumon.R
-import kotlinx.android.synthetic.main.reveal_button.view.btn_txt_tv
-import kotlinx.android.synthetic.main.reveal_button.view.icon_iv
-import kotlinx.android.synthetic.main.reveal_button.view.open_iv
+import kotlinx.android.synthetic.main.reveal_button.view.*
 
 class RevealButton constructor(
     context: Context,
@@ -31,7 +29,7 @@ class RevealButton constructor(
     }
 
     fun setActionListener(listener: () -> Unit) {
-        open_iv.setOnClickListener {
+        reveal_layout.setOnClickListener {
             listener()
             openList()
         }

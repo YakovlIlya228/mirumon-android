@@ -33,6 +33,10 @@ class DeviceListViewModel(val deviceService: DeviceService) : ViewModel(), Lifec
     fun getDeviceSoftware(id: String): LiveData<List<Software>> = liveData {
         emit(deviceService.getDeviceSoftware(id))
     }
+
+    fun getDeviceHardware(id: String) = liveData {
+        emit(deviceService.getDeviceHardware(id))
+    }
 //    fun shutDown(macAddress: String) {
 //        WebSocketDispatcher.sendEvent(SHUTDOWN, DetailsRequest(macAddress))
 //    }
