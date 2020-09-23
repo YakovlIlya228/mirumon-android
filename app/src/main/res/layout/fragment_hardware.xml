@@ -24,6 +24,7 @@
         android:layout_marginStart="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_15"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/motherboard_btn"
         android:background="@drawable/text_background"
         android:paddingBottom="@dimen/dp_10">
@@ -104,6 +105,7 @@
             android:fontFamily="@font/lato_bold"
             android:text="serial number"
             android:textColor="@color/colorMainFont"
+            android:layout_marginTop="@dimen/dp_5"
             android:textSize="12sp"
             app:layout_constraintLeft_toLeftOf="@id/motherboard_name_tv"
             app:layout_constraintTop_toTopOf="@id/divider" />
@@ -121,14 +123,25 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.redbox.mirumon.main.presentation.util.RevealButton
+        android:id="@+id/cpu_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/standard_background"
         android:layout_marginStart="@dimen/dp_15"
-        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginEnd="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/standard_background"
         app:layout_constraintTop_toBottomOf="@id/motherboard_layout"
         app:revealButtonIcon="@drawable/ic_cpu"
         app:revealButtonText="CPU"
-        />
+        tools:layout_editor_absoluteX="15dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cpu_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cpu_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

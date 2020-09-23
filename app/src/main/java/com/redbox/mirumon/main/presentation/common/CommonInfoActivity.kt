@@ -16,7 +16,6 @@ import org.koin.core.qualifier.named
 
 class CommonInfoActivity : AppCompatActivity(){
 
-    private val viewModel: DeviceListViewModel by viewModel(named("AuthViewModel"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

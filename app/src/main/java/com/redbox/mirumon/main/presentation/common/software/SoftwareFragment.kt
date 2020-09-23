@@ -4,27 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.pojo.Software
-import com.redbox.mirumon.main.extensions.applyErrorState
-import com.redbox.mirumon.main.extensions.applyLoadingState
-import com.redbox.mirumon.main.extensions.applySuccessState
-import com.redbox.mirumon.main.presentation.common.CommonInfoActivity
 import com.redbox.mirumon.main.presentation.common.CommonRepository
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
+import com.redbox.mirumon.main.presentation.util.RevealButton.Companion.animateView
 import kotlinx.android.synthetic.main.fragment_software.common_software_btn
 import kotlinx.android.synthetic.main.fragment_software.software_list_rv
-import kotlinx.android.synthetic.main.fragment_software.software_pv
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 
 class SoftwareFragment : Fragment(){
@@ -46,11 +36,9 @@ class SoftwareFragment : Fragment(){
         software_list_rv.layoutManager = LinearLayoutManager(this.context)
         software_list_rv.adapter = adapter
         common_software_btn.setActionListener {
-            applyLoadingState(software_pv)
             viewModel.getDeviceSoftware(CommonRepository.getAddress()).observe(viewLifecycleOwner, Observer {
                 adapter.setList(it as ArrayList<Software>)
-                software_list_rv.isVisible = common_software_btn.stateOpened
-                applySuccessState(software_pv)
+                context?.let { it1 -> animateView(it1,software_list_rv,common_software_btn) }
             })
         }
 //        software_list_rv.adapter = adapter

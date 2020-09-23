@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.software_list_item.view.software_name_tv
 import kotlinx.android.synthetic.main.software_list_item.view.software_vendor_tv
 import kotlinx.android.synthetic.main.software_list_item.view.software_version_tv
 
-class SoftwareListAdapter() :
+class SoftwareListAdapter :
     RecyclerView.Adapter<SoftwareListAdapter.SoftwareViewHolder>() {
 
     var softwareList = ArrayList<Software>()

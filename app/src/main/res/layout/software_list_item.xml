@@ -85,6 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_bold"
+        android:layout_marginTop="@dimen/dp_5"
         android:text="@string/version"
         android:textColor="@color/colorMainFont"
         android:textSize="12sp"

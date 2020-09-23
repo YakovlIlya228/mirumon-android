@@ -29,7 +29,7 @@ val networkModule = module {
     single(named("noAuth")) {
         Retrofit.Builder()
             .addConverterFactory(get() as GsonConverterFactory)
-            .baseUrl(BASE_URL)
+            .baseUrl(get<SharedPreferences>().getString(USER_SERVER, null))
             .build()
     }
     single(named("Auth")) {

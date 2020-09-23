@@ -24,7 +24,6 @@ class ServerActivity : AppCompatActivity() {
     private val viewModel: ServerViewModel by viewModel(named("noAuthViewModel"))
     private val sharedPref: SharedPreferences by inject()
     private lateinit var btnAnim: Animation
-    //    val dataStore: DataStore<Preferences> by inject()
     val TAG = "error_tag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,14 +55,13 @@ class ServerActivity : AppCompatActivity() {
             serverButton.startAnimation(btnAnim)
             GlobalScope.launch(Dispatchers.Main) {
                 try {
+                    sharedPref.edit().putString(USER_SERVER, serverEditText.text.toString()).commit()
                     val token: Token = viewModel.loginUser(
                         loginEditText.text.toString(),
                         passwordEditText.text.toString()
                     )
                     sharedPref.edit().putString(USER_TOKEN, token.accessToken).apply()
                     sharedPref.edit().putString(USER_LOGIN, loginEditText.text.toString()).apply()
-                    sharedPref.edit().putString(USER_SERVER, serverEditText.text.toString())
-                        .apply()
                     val intent = Intent(this@ServerActivity, MainActivity::class.java)
                     startActivity(intent)
 

@@ -11,6 +11,7 @@ import com.redbox.mirumon.main.domain.pojo.Software
 import com.redbox.mirumon.main.domain.websocket.SHUTDOWN
 import com.redbox.mirumon.main.domain.websocket.dispatcher.WebSocketDispatcher
 import com.redbox.mirumon.main.domain.websocket.events.DeviceListEvent
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
