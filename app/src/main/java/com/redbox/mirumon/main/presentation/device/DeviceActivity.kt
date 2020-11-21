@@ -2,32 +2,20 @@ package com.redbox.mirumon.main.presentation.device
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.redbox.mirumon.R
-import com.redbox.mirumon.main.extensions.applyErrorState
-import com.redbox.mirumon.main.extensions.applyTextLoadingState
-import com.redbox.mirumon.main.extensions.applyTextSuccessState
+import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.presentation.common.CommonInfoActivity
-import com.redbox.mirumon.main.presentation.device.DeviceState.Error
-import com.redbox.mirumon.main.presentation.device.DeviceState.ShuttingDown
+import com.redbox.mirumon.main.presentation.common.overview.OverViewState
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import kotlinx.android.synthetic.main.activity_device.device_back_btn
 import kotlinx.android.synthetic.main.activity_device.device_common_btn
 import kotlinx.android.synthetic.main.activity_device.device_domain_tv
-import kotlinx.android.synthetic.main.activity_device.device_exec_btn
-import kotlinx.android.synthetic.main.activity_device.device_exec_et
 import kotlinx.android.synthetic.main.activity_device.device_name_tv
-import kotlinx.android.synthetic.main.activity_device.device_shutdown_btn
 import kotlinx.android.synthetic.main.activity_device.device_user_tv
 import kotlinx.android.synthetic.main.activity_device.device_workgroup_tv
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 
@@ -35,28 +23,35 @@ class DeviceActivity : AppCompatActivity() {
 
     private val viewModel: DeviceListViewModel by viewModel(named("AuthViewModel"))
 
-    //    lateinit var dataTransmitter: CommonInfoActivity.DataTransmitter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
-        val deviceId = intent.extras?.getString("DEVICE_ID")
-        deviceId?.let {
-            viewModel.getDeviceDetail(it).observe(this, Observer {
-                device_name_tv.text = it.name
-                device_domain_tv.text = it.domain
-                device_workgroup_tv.text = it.workgroup
-                device_user_tv.text = it.lastUser.fullName
-            })
-        }
+        with(viewModel){
+            device.observe(this@DeviceActivity){
+                when(it){
+                    is OverViewState.Success -> it.data.apply{
+                        device_name_tv.text = this.name
+                        device_domain_tv.text = this.domain
+                        device_workgroup_tv.text = this.workgroup
+                        device_user_tv.text = this.lastUser.name
+                    }
+                    is OverViewState.Error ->
+                        Toast.makeText(this@DeviceActivity,it.errorMsg, Toast.LENGTH_SHORT).show()
 
+                    else -> TODO()
+                }
+
+            }
+        }
+        viewModel.getDeviceDetail(CommonRepository.getAddress())
         device_back_btn.setOnClickListener {
             super.onBackPressed()
         }
-
         device_common_btn.setOnClickListener {
-            startActivity(Intent(this, CommonInfoActivity::class.java).apply {
-                putExtra("DEVICE_ID", deviceId)
-            })
+            startActivity(Intent(this, CommonInfoActivity::class.java))
+//                .apply {
+//                putExtra("DEVICE_ID",CommonRepository.getAddress())
+//            })
         }
 //            deviceId?.let {
 //                dataTransmitter.passId(it)

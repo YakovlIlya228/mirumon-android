@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import com.redbox.mirumon.main.domain.pojo.*
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.*
 
 interface DeviceService {
@@ -39,6 +41,11 @@ interface DeviceService {
     @Headers( "Content-Type: application/json;charset=UTF-8")
     @GET("/devices")
     suspend fun getDevices(): List<Device>
+
+    @POST("/devices/{id}/shutdown")
+    suspend fun shutdown(@Path("id") id: String): Response<Unit>
+
+
 
 
 

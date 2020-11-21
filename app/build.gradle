@@ -20,7 +20,7 @@ android {
         versionCode 1
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "APPCENTER_SECRET", localProperties["appCenterSecret"]
+//        buildConfigField "String", "APPCENTER_SECRET", localProperties["appCenterSecret"]
         buildConfigField "String", "BASE_URL", localProperties["baseUrl"]
         buildConfigField "String", "USER_TOKEN", '"USER_TOKEN"'
         buildConfigField "String", "USER_SERVER", '"USER_SERVER"'
@@ -41,21 +41,11 @@ android {
 
     }
 
-    signingConfigs {
-        release {
-            storePassword '123456'
-            keyAlias = 'mirumon'
-            keyPassword '123456'
-            storeFile file('C:\\Users\\jakov\\AndroidStudioProjects\\mirumon-android\\mirumon.jks')
-        }
-        release
-    }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
 
 

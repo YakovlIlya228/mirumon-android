@@ -4,24 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.redbox.mirumon.R
-import com.redbox.mirumon.main.extensions.applyErrorState
-import com.redbox.mirumon.main.extensions.applyTextLoadingState
-import com.redbox.mirumon.main.extensions.applyTextSuccessState
-import com.redbox.mirumon.main.presentation.common.CommonRepository
+import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import kotlinx.android.synthetic.main.fragment_overview.common_arch_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_os_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_serial_tv
 import kotlinx.android.synthetic.main.fragment_overview.common_version_tv
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 
 class OverviewFragment : Fragment() {
@@ -39,12 +32,24 @@ class OverviewFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.getDeviceDetail(CommonRepository.getAddress()).observe(viewLifecycleOwner, Observer {
-            common_os_tv.text = it.os[0].name
-            common_arch_tv.text = it.os[0].arch
-            common_serial_tv.text = it.os[0].serialNum
-            common_version_tv.text = it.os[0].version
-        })
+        with(viewModel){
+            device.observe(viewLifecycleOwner){
+                when(it){
+                    is OverViewState.Success ->{
+                        common_os_tv.text = it.data.os[0].name
+                        common_arch_tv.text = it.data.os[0].arch
+                        common_serial_tv.text = it.data.os[0].serialNum
+                        common_version_tv.text = it.data.os[0].version
+                    }
+                    is OverViewState.Error ->
+                        Toast.makeText(context,it.errorMsg, Toast.LENGTH_SHORT).show()
+
+                    else -> TODO()
+                }
+
+            }
+        }
+        viewModel.getDeviceDetail(CommonRepository.getAddress())
 //        vm.state.observe(viewLifecycleOwner, Observer {
 //            when (it) {
 //                is OverViewState.Loading -> {

@@ -24,7 +24,7 @@ val networkModule = module {
     single { RxJava2CallAdapterFactory.create() }
     single { GsonConverterFactory.create() }
     viewModel(named("noAuthViewModel")) { ServerViewModel(get(named("noAuthService"))) }
-    viewModel(named("AuthViewModel")) { DeviceListViewModel(get(named("AuthService"))) }
+    viewModel(named("AuthViewModel")) { DeviceListViewModel(get(named("AuthService")),androidApplication()) }
     //Retrofit clients with or w/o authentication
     single(named("noAuth")) {
         Retrofit.Builder()

@@ -1,13 +1,21 @@
 package com.redbox.mirumon.main.presentation.server
+
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.Bundle
+import android.os.CancellationSignal
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import com.redbox.mirumon.BuildConfig.*
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.pojo.Token
@@ -25,7 +33,9 @@ class ServerActivity : AppCompatActivity() {
     private val sharedPref: SharedPreferences by inject()
     private lateinit var btnAnim: Animation
     val TAG = "error_tag"
+    val USER_PASSWORD = "user_password"
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server)
@@ -35,33 +45,44 @@ class ServerActivity : AppCompatActivity() {
         sharedPref.getString(USER_SERVER, null)?.let {
             serverEditText.text = SpannableStringBuilder(it)
         }
-
-        btnAnim = AnimationUtils.loadAnimation(applicationContext,R.anim.blink)
-//        if (sharedPref.getString(USER_SERVER, null) != null && sharedPref.getString(
-//                USER_LOGIN,
-//                null
-//            ) != null
-//        ) {
-//            if (canAuthenticate(this)) {
-//                val biometricPrompt: BiometricPrompt =
-//                    BiometricPrompt.Builder(this)
-//                        .setTitle("Mirumon Login")
-//                        .setSubtitle("Sign in using fingerprint")
-//                        .build()
-//                biometricPrompt.authenticate()
-//            }
-//        }
+        btnAnim = AnimationUtils.loadAnimation(applicationContext, R.anim.blink)
+        if (sharedPref.getString(USER_SERVER, null) != null && sharedPref.getString(
+                USER_LOGIN,
+                null
+            ) != null && sharedPref.getString(USER_PASSWORD, null) != null
+        ) {
+            if (canAuthenticate(this)) {
+                val biometricPrompt = BiometricPrompt.Builder(this)
+                    .setTitle("Biometric login for Mirumon")
+                    .setSubtitle("Log in using your biometric credential")
+                    .setNegativeButton(
+                        "Cancel",
+                        this.mainExecutor,
+                        DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+                            Toast.makeText(this, "Biometric login cancelled", Toast.LENGTH_SHORT)
+                                .show()
+                        })
+                    .build()
+                biometricPrompt.authenticate(
+                    CancellationSignal(),
+                    this.mainExecutor,
+                    createAuthenticationCallback(this)
+                )
+            }
+        }
         serverButton.setOnClickListener {
             serverButton.startAnimation(btnAnim)
             GlobalScope.launch(Dispatchers.Main) {
                 try {
-                    sharedPref.edit().putString(USER_SERVER, serverEditText.text.toString()).commit()
+                    sharedPref.edit().putString(USER_SERVER, serverEditText.text.toString())
+                        .commit()
                     val token: Token = viewModel.loginUser(
                         loginEditText.text.toString(),
                         passwordEditText.text.toString()
                     )
                     sharedPref.edit().putString(USER_TOKEN, token.accessToken).apply()
                     sharedPref.edit().putString(USER_LOGIN, loginEditText.text.toString()).apply()
+                    sharedPref.edit().putString(USER_PASSWORD, passwordEditText.text.toString()).apply()
                     val intent = Intent(this@ServerActivity, MainActivity::class.java)
                     startActivity(intent)
 
@@ -83,24 +104,25 @@ class ServerActivity : AppCompatActivity() {
 //        return@async InetAddress.getByName(url).isReachable(10000)
 //    }
 
-//    @RequiresApi(Build.VERSION_CODES.P)
-//    fun createAuthenticationCallback(context: Context): BiometricPrompt.AuthenticationCallback {
-//        return object : BiometricPrompt.AuthenticationCallback() {
-//            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
-//                super.onAuthenticationSucceeded(result)
-//                Toast.makeText(context, "Authenticated!", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onAuthenticationFailed() {
-//                super.onAuthenticationFailed()
-//                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
-//    }
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun createAuthenticationCallback(context: Context): BiometricPrompt.AuthenticationCallback {
+        return object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+                super.onAuthenticationSucceeded(result)
+                    passwordEditText.text = SpannableStringBuilder(sharedPref.getString(USER_PASSWORD,null))
+                    serverButton.performClick()
+            }
 
-//    fun canAuthenticate(context: Context): Boolean {
-//        return BiometricManager.from(context)
-//            .canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
-//    }
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                Toast.makeText(context, "Authentication failed!", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    fun canAuthenticate(context: Context): Boolean {
+        return BiometricManager.from(context)
+            .canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+    }
 }

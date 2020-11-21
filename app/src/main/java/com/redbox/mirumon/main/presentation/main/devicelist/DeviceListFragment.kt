@@ -35,7 +35,7 @@ class DeviceListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = DeviceListAdapter()
+        val adapter = DeviceListAdapter(listViewModel)
         device_list_rv.adapter = adapter
         listViewModel.getDevices().observe(viewLifecycleOwner, Observer {
                 adapter.setList(it as ArrayList<Device>)

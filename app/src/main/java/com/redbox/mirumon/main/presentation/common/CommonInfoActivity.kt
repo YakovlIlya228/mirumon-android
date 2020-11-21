@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.redbox.mirumon.R
+import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.presentation.common.software.SoftwareFragment
 import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import kotlinx.android.synthetic.main.activity_common.common_back_btn
@@ -21,7 +22,7 @@ class CommonInfoActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         val titles = resources.getStringArray(R.array.common_titles)
         setContentView(R.layout.activity_common)
-        CommonRepository.setAdress(intent.extras!!.getString("DEVICE_ID")!!)
+//        CommonRepository.setAdress(intent.extras!!.getString("DEVICE_ID")!!)
         common_vp.adapter = CommonViewPagerAdapter(supportFragmentManager)
         common_tabs_tl.setupWithViewPager(common_vp)
         common_tabs_tl.getTabAt(0)?.setIcon(R.drawable.ic_info)
@@ -34,7 +35,6 @@ class CommonInfoActivity : AppCompatActivity(){
             override fun onTabUnselected(p0: TabLayout.Tab) {}
             override fun onTabSelected(p0: TabLayout.Tab) {
                 common_screen_tv.text = titles[p0.position]
-
             }
         })
 //        dataTransmitter = CommonViewPagerAdapter(supportFragmentManager).getItem(1) as DataTransmitter

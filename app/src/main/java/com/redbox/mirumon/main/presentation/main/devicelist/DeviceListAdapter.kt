@@ -10,7 +10,9 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.common.CommonRepository
@@ -23,8 +25,12 @@ import kotlinx.android.synthetic.main.device_list_item.view.device_foreground_cl
 import kotlinx.android.synthetic.main.device_list_item.view.device_indicator_iv
 import kotlinx.android.synthetic.main.device_list_item.view.device_name_tv
 import kotlinx.android.synthetic.main.device_list_item.view.device_power_btn
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class DeviceListAdapter:
+class DeviceListAdapter(val viewModel: DeviceListViewModel) :
     RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder>() {
 
     private var deviceList = ArrayList<Device>()
@@ -35,13 +41,13 @@ class DeviceListAdapter:
                 R.layout.device_list_item,
                 parent,
                 false
-            )
+            ), viewModel
         )
     }
 
     override fun getItemCount() = deviceList.size
 
-    fun setList(list: ArrayList<Device>){
+    fun setList(list: ArrayList<Device>) {
         deviceList = list
         notifyDataSetChanged()
     }
@@ -55,25 +61,38 @@ class DeviceListAdapter:
             val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
             anim.startOffset = (100).toLong()
             indicatorIv.animation = anim
-            viewAnim = AnimationUtils.loadAnimation(context,R.anim.blink)
+            viewAnim = AnimationUtils.loadAnimation(context, R.anim.blink)
             layout.setOnClickListener {
                 layout.startAnimation(viewAnim)
-                val computerIntent = Intent(this.context,DeviceActivity::class.java).apply {
-                    putExtra("DEVICE_ID",id)
+                CommonRepository.setAddress(id)
+                val computerIntent = Intent(this.context, DeviceActivity::class.java).apply {
+                    putExtra("DEVICE_ID", id)
                 }
                 context.startActivity(computerIntent)
                 layout.clearAnimation()
             }
-
-//            powerButton.setOnClickListener {
-//                listener(deviceList[position].macAddress)
-//
-//                notifyItemR-0emoved(position)
-//            }
+            powerButton.setOnClickListener {
+                GlobalScope.launch {
+                    CommonRepository.setAddress(id)
+                    viewModel.responseCode.collect {
+                        if (it.isSuccessful)
+                            GlobalScope.launch(Dispatchers.Main) {
+                                Toast.makeText(
+                                    context,
+                                    "Turning off device with ID:${id}....",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
+                }
+//                viewModel.shutdown(id)
+                viewModel.getDevices()
+            }
         }
     }
 
-    class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class DeviceViewHolder(view: View, val viewModel: DeviceListViewModel) :
+        RecyclerView.ViewHolder(view) {
         val powerButton: ImageButton = view.device_power_btn
         lateinit var id: String
         val layout: ConstraintLayout = view.device_foreground_cl

@@ -1,25 +1,31 @@
 package com.redbox.mirumon.main.presentation.main.devicelist
 
 
-import android.content.SharedPreferences
+import android.app.Application
 import androidx.lifecycle.*
+import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.domain.info.DeviceService
-import com.redbox.mirumon.main.domain.pojo.DetailsRequest
-import com.redbox.mirumon.main.domain.pojo.Device
-import com.redbox.mirumon.main.domain.pojo.DeviceListItem
-import com.redbox.mirumon.main.domain.pojo.Software
-import com.redbox.mirumon.main.domain.websocket.SHUTDOWN
-import com.redbox.mirumon.main.domain.websocket.dispatcher.WebSocketDispatcher
-import com.redbox.mirumon.main.domain.websocket.events.DeviceListEvent
+import com.redbox.mirumon.main.domain.pojo.*
+import com.redbox.mirumon.main.presentation.common.overview.OverViewState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import com.redbox.mirumon.R
+import com.redbox.mirumon.main.presentation.common.software.SoftwareState
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import retrofit2.Response
+import java.lang.Exception
 
-class DeviceListViewModel(val deviceService: DeviceService) : ViewModel(), LifecycleObserver {
+class DeviceListViewModel(private val deviceService: DeviceService, private val app: Application) :
+    ViewModel(), LifecycleObserver {
 
-//    private val deviceList = MutableLiveData<ArrayList<DeviceListItem>>()
-    lateinit var deviceId: String
+    val cpu: MutableLiveData<List<Hardware.CPU>> by lazy { MutableLiveData<List<Hardware.CPU>>() }
+    val motherboard: MutableLiveData<Hardware.Motherboard> by lazy { MutableLiveData<Hardware.Motherboard>() }
+    val software: MutableLiveData<SoftwareState> by lazy { MutableLiveData<SoftwareState>() }
+    val device: MutableLiveData<OverViewState> by lazy { MutableLiveData<OverViewState>() }
+    val responseCode: Flow<Response<Unit>> = flow { emit(shutdown(CommonRepository.getAddress()).await()) }
+
 
     fun getDevices(): LiveData<List<Device>> = liveData { emit(deviceService.getDevices()) }
 
@@ -27,17 +33,50 @@ class DeviceListViewModel(val deviceService: DeviceService) : ViewModel(), Lifec
         return deviceService.getDevices()
     }
 
-    fun getDeviceDetail(id: String): LiveData<Device> = liveData {
-        emit(deviceService.getDeviceDetail(id))
+    fun getDeviceDetail(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            this@DeviceListViewModel.device.postValue(
+                OverViewState.Success(
+                    deviceService.getDeviceDetail(
+                        id
+                    )
+                )
+            )
+        } catch (e: Exception) {
+            this@DeviceListViewModel.device.postValue(
+                OverViewState.Error(
+                    app.applicationContext.resources.getString(
+                        R.string.error_message
+                    )
+                )
+            )
+        }
     }
 
-    fun getDeviceSoftware(id: String): LiveData<List<Software>> = liveData {
-        emit(deviceService.getDeviceSoftware(id))
+//    fun getDeviceDetail(id: String) = liveData {
+//        emit(deviceService.getDeviceDetail(id))
+//    }
+
+    fun getDeviceSoftware(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            software.postValue(SoftwareState.Success(deviceService.getDeviceSoftware(id)))
+        } catch (e: Exception) {
+            software.postValue(SoftwareState.Error(app.applicationContext.resources.getString(R.string.error_message)))
+        }
     }
 
-    fun getDeviceHardware(id: String) = liveData {
-        emit(deviceService.getDeviceHardware(id))
+    fun getDeviceHardware(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        deviceService.getDeviceHardware(id).apply {
+            this@DeviceListViewModel.cpu.postValue(this.cpu)
+            this@DeviceListViewModel.motherboard.postValue(this.motherboard)
+        }
     }
+
+
+    fun shutdown(id: String) = viewModelScope.async {
+        deviceService.shutdown(id)
+    }
+
 //    fun shutDown(macAddress: String) {
 //        WebSocketDispatcher.sendEvent(SHUTDOWN, DetailsRequest(macAddress))
 //    }
