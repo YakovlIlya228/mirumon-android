@@ -2,6 +2,9 @@
 <resources>
     <color name="colorPrimary">#4E617B</color>
     <color name="colorPrimaryDark">#425269</color>
+    <color name="mirumonDark">#3A485B</color>
+    <color name="mirumonAccent">#425269</color>
+    <color name="mirumonAccentLight">#44546B</color>
     <color name="colorAccent">#98BAE7</color>
     <color name="colorMainFont">#98BAE7</color>
     <color name="colorAccentFont">#FFFFFF</color>

@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.domain.pojo.Software
-import com.redbox.mirumon.main.presentation.common.hardware.GenericAdapter
-import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
+import com.redbox.mirumon.main.presentation.GenericAdapter
+import com.redbox.mirumon.main.presentation.main.MainViewModel
 import com.redbox.mirumon.main.presentation.util.RevealButton.Companion.animateView
 import kotlinx.android.synthetic.main.fragment_software.common_software_btn
 import kotlinx.android.synthetic.main.fragment_software.software_list_rv
@@ -21,7 +21,7 @@ import org.koin.core.qualifier.named
 
 class SoftwareFragment : Fragment(){
 
-    private val viewModel: DeviceListViewModel by sharedViewModel(named("AuthViewModel"))
+    private val viewModel: MainViewModel by sharedViewModel(named("AuthViewModel"))
     private lateinit var softwareAdapter: GenericAdapter<Software>
 
     override fun onCreateView(
@@ -53,32 +53,5 @@ class SoftwareFragment : Fragment(){
         common_software_btn.setActionListener {
             animateView(requireContext(),software_list_rv,common_software_btn)
         }
-//        software_list_rv.adapter = adapter
-//        vm.state.observe(viewLifecycleOwner, Observer {
-//            when (it) {
-//                is SoftwareState.Initial -> {
-//                    GlobalScope.launch(Dispatchers.IO) {
-//                        vm.getSoftware()}
-//                }
-//                is SoftwareState.Loading -> {
-//                    common_software_btn.setActionListener {
-//                        software_pv.isVisible = !software_pv.isVisible
-//                    }
-//                    applyLoadingState(software_list_rv)
-//                }
-//                is SoftwareState.Success -> {
-//                    applySuccessState(software_pv)
-//                    adapter = SoftwareListAdapter((it.softList))
-//                    software_list_rv.adapter = adapter
-//                    software_list_rv.isVisible = common_software_btn.stateOpened
-//                    common_software_btn.setActionListener {
-//                        software_list_rv.isVisible = !software_list_rv.isVisible
-//                    }
-//                }
-//                is SoftwareState.Error -> {
-//                    applyErrorState()
-//                }
-//            }
-//        })
     }
 }

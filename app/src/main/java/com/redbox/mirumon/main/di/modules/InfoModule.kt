@@ -5,7 +5,7 @@ import com.redbox.mirumon.main.domain.info.DeviceService
 import com.redbox.mirumon.main.presentation.common.overview.OverViewModel
 import com.redbox.mirumon.main.presentation.common.software.SoftwareViewModel
 import com.redbox.mirumon.main.presentation.device.DeviceViewModel
-import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
+import com.redbox.mirumon.main.presentation.main.MainViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -15,7 +15,12 @@ val infoModule = module {
     viewModel { SoftwareViewModel(get()) }
     viewModel { OverViewModel(get()) }
     viewModel { DeviceViewModel(get()) }
-    viewModel { DeviceListViewModel(get(),androidApplication()) }
+    viewModel {
+        MainViewModel(
+            get(),
+            androidApplication()
+        )
+    }
     single { DeviceRepository(get()) }
     single { get<Retrofit>().create(DeviceService::class.java) }
 }

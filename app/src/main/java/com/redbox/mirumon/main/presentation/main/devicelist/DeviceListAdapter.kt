@@ -12,13 +12,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.domain.pojo.Device
-import com.redbox.mirumon.main.domain.pojo.DeviceListItem
 import com.redbox.mirumon.main.presentation.device.DeviceActivity
+import com.redbox.mirumon.main.presentation.main.MainViewModel
 import kotlinx.android.synthetic.main.device_list_item.view.common_arch_tv
 import kotlinx.android.synthetic.main.device_list_item.view.common_os_tv
 import kotlinx.android.synthetic.main.device_list_item.view.device_foreground_cl
@@ -30,7 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class DeviceListAdapter(val viewModel: DeviceListViewModel) :
+class DeviceListAdapter(val viewModel: MainViewModel) :
     RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder>() {
 
     private var deviceList = ArrayList<Device>()
@@ -91,7 +90,7 @@ class DeviceListAdapter(val viewModel: DeviceListViewModel) :
         }
     }
 
-    class DeviceViewHolder(view: View, val viewModel: DeviceListViewModel) :
+    class DeviceViewHolder(view: View, val viewModel: MainViewModel) :
         RecyclerView.ViewHolder(view) {
         val powerButton: ImageButton = view.device_power_btn
         lateinit var id: String

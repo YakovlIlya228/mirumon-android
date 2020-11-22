@@ -1,4 +1,4 @@
-package com.redbox.mirumon.main.presentation.common.hardware
+package com.redbox.mirumon.main.presentation
 
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +34,10 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder>
     protected abstract fun getLayoutId(position: Int, obj: T): Int
 
     protected open fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolderFactory.create(view, viewType)
+        return ViewHolderFactory.create(
+            view,
+            viewType
+        )
     }
 
     internal interface Binder<T> {

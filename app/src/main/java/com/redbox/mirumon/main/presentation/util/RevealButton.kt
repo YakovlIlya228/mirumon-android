@@ -26,14 +26,15 @@ class RevealButton constructor(
             val slideDownAnim = AnimationUtils.loadAnimation(context, R.anim.slide_down)
             when(btn.stateOpened){
                 true -> {
-                    view.startAnimation(slideDownAnim)
-                    view.isVisible = btn.stateOpened
-                }
-                else -> {
                     view.startAnimation(slideUpAnim)
                     android.os.Handler().postDelayed({
-                        view.isVisible = btn.stateOpened
+                        view.visibility = View.GONE
                     },275)
+
+                }
+                else -> {
+                    view.startAnimation(slideDownAnim)
+                    view.visibility = View.VISIBLE
                 }
             }
         }

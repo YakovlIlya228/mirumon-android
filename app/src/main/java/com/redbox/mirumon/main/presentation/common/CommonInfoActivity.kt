@@ -1,19 +1,13 @@
 package com.redbox.mirumon.main.presentation.common
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.redbox.mirumon.R
-import com.redbox.mirumon.main.domain.common.CommonRepository
-import com.redbox.mirumon.main.presentation.common.software.SoftwareFragment
-import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
 import kotlinx.android.synthetic.main.activity_common.common_back_btn
 import kotlinx.android.synthetic.main.activity_common.common_screen_tv
 import kotlinx.android.synthetic.main.activity_common.common_tabs_tl
 import kotlinx.android.synthetic.main.activity_common.common_vp
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.qualifier.named
 
 class CommonInfoActivity : AppCompatActivity(){
 
@@ -28,7 +22,7 @@ class CommonInfoActivity : AppCompatActivity(){
         common_tabs_tl.getTabAt(0)?.setIcon(R.drawable.ic_info)
         common_tabs_tl.getTabAt(1)?.setIcon(R.drawable.ic_software)
         common_tabs_tl.getTabAt(2)?.setIcon(R.drawable.ic_hardware)
-        common_vp.currentItem = 1
+        common_vp.currentItem = 0
         common_screen_tv.text = titles[1]
         common_tabs_tl.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab) {}

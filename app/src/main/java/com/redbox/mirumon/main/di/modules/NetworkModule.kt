@@ -6,7 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.redbox.mirumon.BuildConfig.*
 import com.redbox.mirumon.main.domain.info.DeviceService
-import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
+import com.redbox.mirumon.main.presentation.main.MainViewModel
 import com.redbox.mirumon.main.presentation.server.ServerViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,7 +24,12 @@ val networkModule = module {
     single { RxJava2CallAdapterFactory.create() }
     single { GsonConverterFactory.create() }
     viewModel(named("noAuthViewModel")) { ServerViewModel(get(named("noAuthService"))) }
-    viewModel(named("AuthViewModel")) { DeviceListViewModel(get(named("AuthService")),androidApplication()) }
+    viewModel(named("AuthViewModel")) {
+        MainViewModel(
+            get(named("AuthService")),
+            androidApplication()
+        )
+    }
     //Retrofit clients with or w/o authentication
     single(named("noAuth")) {
         Retrofit.Builder()

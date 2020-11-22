@@ -7,5 +7,6 @@ import com.redbox.mirumon.main.domain.pojo.OperatingSystem
 sealed class OverViewState {
     object Loading : OverViewState()
     class Success(val data: Device) : OverViewState()
+    class SuccessList(val data: List<Device>): OverViewState()
     class Error(val errorMsg: String) : OverViewState()
 }

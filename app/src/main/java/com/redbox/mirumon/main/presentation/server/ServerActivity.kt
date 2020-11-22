@@ -64,7 +64,7 @@ class ServerActivity : AppCompatActivity() {
                         })
                     .build()
                 biometricPrompt.authenticate(
-                    CancellationSignal(),
+                    getCancellationSignal(),
                     this.mainExecutor,
                     createAuthenticationCallback(this)
                 )
@@ -100,9 +100,6 @@ class ServerActivity : AppCompatActivity() {
         }
     }
 
-//    fun isReachable(url: String) = GlobalScope.async(Dispatchers.IO) {
-//        return@async InetAddress.getByName(url).isReachable(10000)
-//    }
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun createAuthenticationCallback(context: Context): BiometricPrompt.AuthenticationCallback {
@@ -121,7 +118,16 @@ class ServerActivity : AppCompatActivity() {
         }
     }
 
-    fun canAuthenticate(context: Context): Boolean {
+    private fun getCancellationSignal(): CancellationSignal{
+        val cancellationSignal = CancellationSignal()
+        cancellationSignal.setOnCancelListener {
+            Toast.makeText(this, "Biometric login cancelled", Toast.LENGTH_SHORT)
+                .show()
+        }
+        return cancellationSignal
+    }
+
+    private fun canAuthenticate(context: Context): Boolean {
         return BiometricManager.from(context)
             .canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
     }

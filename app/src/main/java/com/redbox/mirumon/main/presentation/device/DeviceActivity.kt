@@ -9,7 +9,7 @@ import com.redbox.mirumon.R
 import com.redbox.mirumon.main.domain.common.CommonRepository
 import com.redbox.mirumon.main.presentation.common.CommonInfoActivity
 import com.redbox.mirumon.main.presentation.common.overview.OverViewState
-import com.redbox.mirumon.main.presentation.main.devicelist.DeviceListViewModel
+import com.redbox.mirumon.main.presentation.main.MainViewModel
 import kotlinx.android.synthetic.main.activity_device.device_back_btn
 import kotlinx.android.synthetic.main.activity_device.device_common_btn
 import kotlinx.android.synthetic.main.activity_device.device_domain_tv
@@ -21,7 +21,7 @@ import org.koin.core.qualifier.named
 
 class DeviceActivity : AppCompatActivity() {
 
-    private val viewModel: DeviceListViewModel by viewModel(named("AuthViewModel"))
+    private val viewModel: MainViewModel by viewModel(named("AuthViewModel"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -28,4 +28,5 @@ class MainActivity : AppCompatActivity() {
 
         main_fragments_vp.currentItem = 1
     }
+
 }

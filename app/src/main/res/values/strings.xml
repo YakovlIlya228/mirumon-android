@@ -11,9 +11,9 @@
     <string name="domain">domain</string>
     <string name="sign_in">Sign In</string>
     <string name="example_server">http://example.com</string>
-    <string name="login">Login:</string>
-    <string name="password">Password:</string>
-    <string name="server">Server address:</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="server">Server address</string>
     <string name="current_user">current user</string>
     <string name="workgroup">workgroup</string>
     <string name="PC_name">PC name</string>
